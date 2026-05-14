@@ -52,7 +52,7 @@ const Header = ({ currentPage, setCurrentPage, user, onLogout }) => {
 
       {/* User Section */}
       {user && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div className="user-section" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <div style={{ position: 'relative' }}>
             <button
               onClick={() => {
@@ -70,12 +70,7 @@ const Header = ({ currentPage, setCurrentPage, user, onLogout }) => {
             >
               <Bell size={20} />
               {unreadCount > 0 && (
-                <span style={{
-                  position: 'absolute', top: '4px', right: '4px',
-                  background: '#ef4444', color: 'white', fontSize: '10px',
-                  fontWeight: 800, padding: '2px 5px', borderRadius: '10px',
-                  border: '2px solid white', minWidth: '18px'
-                }}>
+                <span className="notification-badge">
                   {unreadCount}
                 </span>
               )}
@@ -83,12 +78,7 @@ const Header = ({ currentPage, setCurrentPage, user, onLogout }) => {
 
             {/* Notification Dropdown */}
             {showNotifs && (
-              <div style={{
-                position: 'absolute', top: '100%', right: 0, marginTop: '12px',
-                width: '320px', background: 'white', borderRadius: '16px',
-                boxShadow: '0 10px 25px rgba(0,0,0,0.1)', border: '1px solid var(--surface-border)',
-                overflow: 'hidden', animation: 'slideIn 0.2s ease-out'
-              }}>
+              <div className="notification-dropdown">
                 <div style={{
                   padding: '16px', borderBottom: '1px solid var(--surface-border)',
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -97,21 +87,21 @@ const Header = ({ currentPage, setCurrentPage, user, onLogout }) => {
                   <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>Notifications</span>
                   <div style={{ display: 'flex', gap: '8px' }}>
                     <button 
-                      onClick={toggleNotifications}
+                      onClick={(e) => { e.stopPropagation(); toggleNotifications(); }}
                       style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}
                       title={notificationsEnabled ? "Disable System Notifications" : "Enable System Notifications"}
                     >
                       <Settings size={16} color={notificationsEnabled ? '#3b82f6' : 'currentColor'} />
                     </button>
                     <button 
-                      onClick={clearNotifications}
+                      onClick={(e) => { e.stopPropagation(); clearNotifications(); }}
                       style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}
                       title="Clear All"
                     >
                       <Trash2 size={16} />
                     </button>
                     <button 
-                      onClick={() => setShowNotifs(false)}
+                      onClick={(e) => { e.stopPropagation(); setShowNotifs(false); }}
                       style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}
                     >
                       <X size={16} />
@@ -127,11 +117,7 @@ const Header = ({ currentPage, setCurrentPage, user, onLogout }) => {
                     </div>
                   ) : (
                     notifications.map(notif => (
-                      <div key={notif.id} style={{
-                        padding: '12px', borderRadius: '10px', marginBottom: '4px',
-                        background: notif.read ? 'transparent' : 'rgba(59,130,246,0.05)',
-                        transition: 'background 0.2s'
-                      }}>
+                      <div key={notif.id} className={`notif-item ${!notif.read ? 'unread' : ''}`}>
                         <div style={{ fontWeight: 700, fontSize: '0.85rem', marginBottom: '2px', color: 'var(--text-primary)' }}>
                           {notif.title}
                         </div>
@@ -155,7 +141,7 @@ const Header = ({ currentPage, setCurrentPage, user, onLogout }) => {
             boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
           }}>
             <User size={16} color="var(--accent-primary)" />
-            <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+            <span className="user-badge-text" style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-primary)' }}>
               {user.name || user.email}
             </span>
           </div>
@@ -169,7 +155,7 @@ const Header = ({ currentPage, setCurrentPage, user, onLogout }) => {
             }}
             title="Sign Out"
           >
-            <LogOut size={15} /> Sign Out
+            <LogOut size={15} /> <span className="sign-out-text">Sign Out</span>
           </button>
         </div>
       )}
