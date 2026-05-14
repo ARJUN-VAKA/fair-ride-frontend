@@ -37,7 +37,7 @@ export const authStore = {
       localStorage.setItem('fair_ride_token', data.token);
       return { success: true, role: data.user.role };
     } catch (err) {
-      return { success: false, error: 'Server is warming up. Please try again in a moment.' };
+      return { success: false, error: `Connection Error: ${err.message}` };
     }
   },
 
@@ -55,7 +55,7 @@ export const authStore = {
       localStorage.setItem('fair_ride_token', data.token);
       return { success: true, role: data.user.role };
     } catch (err) {
-      return { success: false, error: 'Server is warming up. Please wait a moment and try again.' };
+      return { success: false, error: `Connection Error: ${err.message}` };
     }
   },
 
