@@ -4,8 +4,44 @@ import { authStore } from '../utils/authStore';
 
 export const useNotifications = () => {
   const [enabled, setEnabled] = useState(() => localStorage.getItem('fair_ride_notifications') === 'true');
+  const [notifications, setNotifications] = useState(() => {
+    const saved = localStorage.getItem('fair_ride_notification_list');
+    return saved ? JSON.parse(saved) : [];
+  });
   const user = authStore.getUser();
   const lastMessageTime = useRef(Date.now());
+
+  // Save notifications to localStorage when they change
+  useEffect(() => {
+    localStorage.setItem('fair_ride_notification_list', JSON.stringify(notifications));
+  }, [notifications]);
+
+  const addNotification = (title, body) => {
+    const newNotif = {
+      id: Date.now() + Math.random(),
+      title,
+      body,
+      timestamp: new Date().toISOString(),
+      read: false
+    };
+    
+    setNotifications(prev => [newNotif, ...prev].slice(0, 20)); // Keep last 20
+    
+    // Also trigger system notification if enabled
+    if (enabled && 'Notification' in window && Notification.permission === 'granted') {
+      new Notification(title, { body });
+    }
+  };
+
+  const clearNotifications = () => {
+    setNotifications([]);
+  };
+
+  const markAllRead = () => {
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+  };
+
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   const requestPermission = async () => {
     if (!('Notification' in window)) {
@@ -28,7 +64,7 @@ export const useNotifications = () => {
       if (granted) {
         setEnabled(true);
         localStorage.setItem('fair_ride_notifications', 'true');
-        new Notification('Fair Ride', { body: 'Notifications enabled!' });
+        addNotification('Fair Ride', 'Notifications enabled!');
       } else {
         alert('Please allow notifications in your browser settings.');
       }
@@ -43,8 +79,6 @@ export const useNotifications = () => {
 
     const checkUpdates = async () => {
       try {
-        // Poll for new messages in user's active rides
-        // Note: For a production app, use specific backend push notifications or targeted WebSockets
         const myRides = await poolStore.getRidesByDriver(user.id);
         const myBookings = await poolStore.getBookingsByPassenger(user.id);
         const rideIds = [
@@ -60,7 +94,7 @@ export const useNotifications = () => {
           );
           
           for (const msg of newMsgs) {
-            new Notification(`New message from ${msg.senderName}`, { body: msg.text });
+            addNotification(`New message from ${msg.senderName}`, msg.text);
             lastMessageTime.current = new Date(msg.timestamp).getTime();
           }
         }
@@ -69,9 +103,16 @@ export const useNotifications = () => {
       }
     };
 
-    const interval = setInterval(checkUpdates, 10000); // Check every 10 seconds to save requests
+    const interval = setInterval(checkUpdates, 10000); 
     return () => clearInterval(interval);
   }, [enabled, user]);
 
-  return { enabled, toggleNotifications };
+  return { 
+    enabled, 
+    toggleNotifications, 
+    notifications, 
+    unreadCount, 
+    clearNotifications, 
+    markAllRead 
+  };
 };

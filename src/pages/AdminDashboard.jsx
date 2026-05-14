@@ -55,7 +55,7 @@ const StatCard = ({ icon: Icon, label, value, color }) => (
       <Icon size={20} color={color} />
       <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>{label}</span>
     </div>
-    <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#f8fafc' }}>{value}</div>
+    <div style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-primary)' }}>{value}</div>
   </div>
 );
 
@@ -119,7 +119,7 @@ const DatabaseConfig = () => {
       <div className="glass-panel" style={{ padding: '20px', marginBottom: '24px', borderLeft: '4px solid #10b981' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
           <Database size={18} color="#10b981" />
-          <strong style={{ color: '#f8fafc' }}>Active Database</strong>
+          <strong style={{ color: 'var(--text-primary)' }}>Active Database</strong>
           <span style={{ fontSize: '0.7rem', background: 'rgba(16,185,129,0.15)', color: '#10b981', padding: '2px 8px', borderRadius: '20px', fontWeight: 700 }}>
             ● CONNECTED
           </span>
@@ -210,8 +210,8 @@ const DatabaseConfig = () => {
         </h3>
         <ol style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: 2, paddingLeft: '20px', margin: 0 }}>
           <li>Go to <a href="https://cloud.mongodb.com" target="_blank" rel="noreferrer" style={{ color: '#3b82f6' }}>cloud.mongodb.com</a> and sign in.</li>
-          <li>Click your cluster → <strong style={{ color: '#f8fafc' }}>Connect</strong> → <strong style={{ color: '#f8fafc' }}>Drivers</strong>.</li>
-          <li>Select <strong style={{ color: '#f8fafc' }}>Node.js</strong> and copy the connection string.</li>
+          <li>Click your cluster → <strong style={{ color: 'var(--text-primary)' }}>Connect</strong> → <strong style={{ color: 'var(--text-primary)' }}>Drivers</strong>.</li>
+          <li>Select <strong style={{ color: 'var(--text-primary)' }}>Node.js</strong> and copy the connection string.</li>
           <li>Replace <code style={{ background: 'rgba(255,255,255,0.05)', padding: '2px 6px', borderRadius: '4px' }}>&lt;password&gt;</code> with your actual password.</li>
           <li>Add <code style={{ background: 'rgba(255,255,255,0.05)', padding: '2px 6px', borderRadius: '4px' }}>/fairride</code> before the <code>?</code> query string.</li>
           <li>Paste it above, test the connection, then save.</li>
@@ -273,7 +273,7 @@ const AdminDashboard = ({ onLogout }) => {
       <aside className="admin-sidebar">
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 12px', marginBottom: '24px' }}>
           <Car size={24} color="#3b82f6" />
-          <span style={{ fontWeight: 800, fontSize: '1.1rem', color: '#f8fafc' }}>Fair Ride</span>
+          <span style={{ fontWeight: 800, fontSize: '1.1rem', color: 'var(--text-primary)' }}>Fair Ride</span>
           <span style={{
             background: 'rgba(59,130,246,0.2)', color: '#3b82f6', fontSize: '0.65rem',
             padding: '2px 6px', borderRadius: '4px', fontWeight: 700
@@ -326,7 +326,7 @@ const AdminDashboard = ({ onLogout }) => {
                   borderLeft: `3px solid ${savedKeys[p.id] ? p.color : 'rgba(255,255,255,0.1)'}`
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <span style={{ fontWeight: 700, color: '#f8fafc' }}>{p.name}</span>
+                    <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{p.name}</span>
                     {savedKeys[p.id]
                       ? <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#10b981', fontSize: '0.8rem' }}><CheckCircle size={14} /> Live</span>
                       : <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#94a3b8', fontSize: '0.8rem' }}><XCircle size={14} /> Simulated</span>
@@ -346,7 +346,7 @@ const AdminDashboard = ({ onLogout }) => {
                 <TrendingUp size={18} color="#3b82f6" /> How API Integration Works
               </h3>
               <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: '0.9rem', lineHeight: 1.6 }}>
-                When you paste a valid API key in the <strong style={{ color: '#f8fafc' }}>API Keys</strong> tab, the app will
+                When you paste a valid API key in the <strong style={{ color: 'var(--text-primary)' }}>API Keys</strong> tab, the app will
                 use that provider's live pricing endpoint to fetch real-time fares. For any provider
                 without a key, the dynamic algorithmic engine provides accurate realistic estimates.
                 Both modes work seamlessly side-by-side.
@@ -442,7 +442,7 @@ const AdminDashboard = ({ onLogout }) => {
                 <Shield size={18} color="#3b82f6" /> Admin Account
               </h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '12px' }}>
-                Signed in as: <strong style={{ color: '#f8fafc' }}>{authStore.getUser()?.email}</strong>
+                Signed in as: <strong style={{ color: 'var(--text-primary)' }}>{authStore.getUser()?.email}</strong>
               </p>
               <button className="btn-secondary" onClick={onLogout} style={{ display: 'inline-flex', gap: '8px', alignItems: 'center' }}>
                 <LogOut size={16} /> Sign Out

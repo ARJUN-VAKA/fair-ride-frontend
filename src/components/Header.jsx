@@ -1,13 +1,22 @@
 import React from 'react';
-import { Car, LogOut, User, ChevronDown, Bell } from 'lucide-react';
+import { Car, LogOut, User, ChevronDown, Bell, Settings, Trash2, X } from 'lucide-react';
 
 import { useNotifications } from '../hooks/useNotifications';
 
 const Header = ({ currentPage, setCurrentPage, user, onLogout }) => {
-  const { enabled: notificationsEnabled, toggleNotifications } = useNotifications();
+  const { 
+    enabled: notificationsEnabled, 
+    toggleNotifications, 
+    notifications, 
+    unreadCount, 
+    clearNotifications,
+    markAllRead
+  } = useNotifications();
+
+  const [showNotifs, setShowNotifs] = React.useState(false);
 
   return (
-    <header className="header">
+    <header className="header" style={{ position: 'relative', zIndex: 1000 }}>
       <div className="logo" onClick={() => setCurrentPage('home')}>
         <Car size={32} color="#3b82f6" />
         Fair Ride
@@ -44,19 +53,101 @@ const Header = ({ currentPage, setCurrentPage, user, onLogout }) => {
       {/* User Section */}
       {user && (
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button
-            onClick={toggleNotifications}
-            style={{
-              background: 'none', border: 'none', cursor: 'pointer',
-              color: notificationsEnabled ? '#3b82f6' : 'var(--text-secondary)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              padding: '8px', borderRadius: '50%', transition: 'all 0.2s',
-              background: notificationsEnabled ? 'rgba(59,130,246,0.1)' : 'transparent'
-            }}
-            title={notificationsEnabled ? "Notifications Enabled" : "Enable Notifications"}
-          >
-            <Bell size={20} />
-          </button>
+          <div style={{ position: 'relative' }}>
+            <button
+              onClick={() => {
+                setShowNotifs(!showNotifs);
+                if (!showNotifs) markAllRead();
+              }}
+              style={{
+                background: 'none', border: 'none', cursor: 'pointer',
+                color: notificationsEnabled ? '#3b82f6' : 'var(--text-secondary)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                padding: '8px', borderRadius: '50%', transition: 'all 0.2s',
+                background: showNotifs ? 'rgba(59,130,246,0.1)' : 'transparent'
+              }}
+              title="Notifications"
+            >
+              <Bell size={20} />
+              {unreadCount > 0 && (
+                <span style={{
+                  position: 'absolute', top: '4px', right: '4px',
+                  background: '#ef4444', color: 'white', fontSize: '10px',
+                  fontWeight: 800, padding: '2px 5px', borderRadius: '10px',
+                  border: '2px solid white', minWidth: '18px'
+                }}>
+                  {unreadCount}
+                </span>
+              )}
+            </button>
+
+            {/* Notification Dropdown */}
+            {showNotifs && (
+              <div style={{
+                position: 'absolute', top: '100%', right: 0, marginTop: '12px',
+                width: '320px', background: 'white', borderRadius: '16px',
+                boxShadow: '0 10px 25px rgba(0,0,0,0.1)', border: '1px solid var(--surface-border)',
+                overflow: 'hidden', animation: 'slideIn 0.2s ease-out'
+              }}>
+                <div style={{
+                  padding: '16px', borderBottom: '1px solid var(--surface-border)',
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  background: '#f8fafc'
+                }}>
+                  <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>Notifications</span>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <button 
+                      onClick={toggleNotifications}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}
+                      title={notificationsEnabled ? "Disable System Notifications" : "Enable System Notifications"}
+                    >
+                      <Settings size={16} color={notificationsEnabled ? '#3b82f6' : 'currentColor'} />
+                    </button>
+                    <button 
+                      onClick={clearNotifications}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}
+                      title="Clear All"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                    <button 
+                      onClick={() => setShowNotifs(false)}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                </div>
+
+                <div style={{ maxHeight: '360px', overflowY: 'auto', padding: '8px' }}>
+                  {notifications.length === 0 ? (
+                    <div style={{ padding: '32px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                      <Bell size={32} style={{ opacity: 0.2, marginBottom: '8px' }} />
+                      <p>No notifications yet</p>
+                    </div>
+                  ) : (
+                    notifications.map(notif => (
+                      <div key={notif.id} style={{
+                        padding: '12px', borderRadius: '10px', marginBottom: '4px',
+                        background: notif.read ? 'transparent' : 'rgba(59,130,246,0.05)',
+                        transition: 'background 0.2s'
+                      }}>
+                        <div style={{ fontWeight: 700, fontSize: '0.85rem', marginBottom: '2px', color: 'var(--text-primary)' }}>
+                          {notif.title}
+                        </div>
+                        <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>
+                          {notif.body}
+                        </div>
+                        <div style={{ fontSize: '0.7rem', color: '#94a3b8', marginTop: '6px' }}>
+                          {new Date(notif.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
           <div style={{
             display: 'flex', alignItems: 'center', gap: '8px',
             background: '#ffffff', padding: '8px 14px',
