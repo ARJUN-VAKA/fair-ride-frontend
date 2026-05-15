@@ -22,7 +22,7 @@ self.addEventListener('activate', (event) => {
         cacheNames.filter((name) => name !== CACHE_NAME)
           .map((name) => caches.delete(name))
       );
-    })
+    }).then(() => self.clients.claim())
   );
 });
 

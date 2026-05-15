@@ -19,7 +19,7 @@ const Header = ({ currentPage, setCurrentPage, user, onLogout }) => {
     <header className="header" style={{ position: 'relative', zIndex: 1000 }}>
       <div className="logo" onClick={() => setCurrentPage('home')}>
         <Car size={32} color="#3b82f6" />
-        Fair Ride
+        Fair Ride <span style={{ fontSize: '0.6rem', background: '#3b82f6', color: '#fff', padding: '2px 6px', borderRadius: '4px', marginLeft: '4px', verticalAlign: 'middle' }}>v2.1</span>
       </div>
       <nav className="nav-links">
         <a
