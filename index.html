@@ -4,30 +4,10 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/logo512.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#1e3a8a" />
-    <link rel="apple-touch-icon" href="/logo512.png" />
     <title>Fair Ride - Ride Fare Aggregator</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').then(reg => {
-            reg.onupdatefound = () => {
-              const installingWorker = reg.installing;
-              installingWorker.onstatechange = () => {
-                if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                  // New update found! Reload the page to apply it.
-                  window.location.reload();
-                }
-              };
-            };
-          });
-        });
-      }
-    </script>
   </body>
 </html>
