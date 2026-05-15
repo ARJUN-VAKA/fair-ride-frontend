@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MapPin, Navigation, Search, Users, Link as LinkIcon, CheckCircle, Map as MapIcon } from 'lucide-react';
-import ComparisonResults from '../components/ComparisonResults';
+import FareComparisonGrid from '../components/FareComparisonGrid';
 import { geocodeAddress } from '../services/geocoding';
 import AccountLinkModal from '../components/AccountLinkModal';
 import LocationAutocomplete from '../components/LocationAutocomplete';
@@ -180,7 +180,7 @@ const Home = () => {
           <h2 style={{ marginBottom: '20px', fontSize: '2rem' }}>
             Available Rides
           </h2>
-          <ComparisonResults coords={coords} addresses={addresses} accountsLinked={accountsLinked} />
+          <FareComparisonGrid coords={coords} addresses={addresses} accountsLinked={accountsLinked} />
         </div>
       )}
     </div>
