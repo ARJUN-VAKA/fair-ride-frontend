@@ -59,5 +59,9 @@ export const generateProviderLink = (provider, pickupCoords, dropoffCoords, pick
     );
   }
 
+  if (p.includes('bharat')) {
+    return `https://www.bharattaxi.com/`;
+  }
+
   return '#';
 };
