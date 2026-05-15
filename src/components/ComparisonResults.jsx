@@ -62,86 +62,108 @@ const ComparisonResults = ({ coords, addresses, accountsLinked }) => {
   };
 
   return (
-    <div className="page-enter" style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid var(--surface-border)', overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
-      {/* GRID HEADER */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr 1fr', borderBottom: '1px solid var(--surface-border)', background: '#f8fafc' }}>
-        {vehicleTypes.map(v => {
-          const Icon = v.icon;
-          return (
-            <div key={v.id} style={{ padding: '20px', textAlign: 'center', borderLeft: '1px solid var(--surface-border)' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-                <Icon size={22} color="var(--text-primary)" />
-                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-secondary)' }}>{v.label}</span>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* GRID ROWS */}
-      {providers.map((pName, pIdx) => {
-        const logo = getProviderLogo(pName);
-        return (
-          <div key={pName} style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr 1fr', borderBottom: pIdx < providers.length - 1 ? '1px solid var(--surface-border)' : 'none' }}>
-            <div style={{ padding: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: logo.bg, color: logo.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6rem', fontWeight: 900, textTransform: 'uppercase' }}>
-                {pName.charAt(0)}
-              </div>
-              <span style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--text-primary)' }}>{logo.label}</span>
-            </div>
+    <div className="page-enter" style={{ background: '#ffffff', borderRadius: '20px', border: '1px solid var(--surface-border)', overflow: 'hidden', boxShadow: '0 8px 30px rgba(0,0,0,0.08)', marginBottom: '40px' }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
+        <thead>
+          <tr style={{ background: '#f8fafc', borderBottom: '1px solid var(--surface-border)' }}>
+            <th style={{ padding: '16px 12px', width: '30%' }}></th>
             {vehicleTypes.map(v => {
-              const fare = getFare(pName, v.id);
-              const isSelected = selected?.provider === pName && selected?.type === v.id;
+              const Icon = v.icon;
               return (
-                <div 
-                  key={v.id} 
-                  onClick={() => fare && setSelected({ provider: pName, type: v.id, price: fare.price })}
-                  style={{ 
-                    padding: '20px', 
-                    textAlign: 'center', 
-                    borderLeft: '1px solid var(--surface-border)', 
-                    cursor: fare ? 'pointer' : 'default',
-                    background: isSelected ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
-                    transition: 'all 0.2s',
-                    position: 'relative'
-                  }}
-                >
-                  <span style={{ fontWeight: 700, fontSize: '1.1rem', color: fare ? 'var(--text-primary)' : '#cbd5e1' }}>
-                    {fare ? `₹${fare.price}` : '--'}
-                  </span>
-                  {isSelected && <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '3px', background: '#3b82f6' }} />}
-                </div>
+                <th key={v.id} style={{ padding: '16px 8px', borderLeft: '1px solid var(--surface-border)' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
+                    <div style={{ color: 'var(--text-primary)' }}><Icon size={20} /></div>
+                    <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{v.label}</span>
+                  </div>
+                </th>
               );
             })}
-          </div>
-        );
-      })}
+          </tr>
+        </thead>
+        <tbody>
+          {providers.map((pName, pIdx) => {
+            const logo = getProviderLogo(pName);
+            return (
+              <tr key={pName} style={{ borderBottom: pIdx < providers.length - 1 ? '1px solid var(--surface-border)' : 'none', transition: 'background 0.2s' }}>
+                <td style={{ padding: '16px 12px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ 
+                      width: '32px', height: '32px', borderRadius: '10px', 
+                      background: logo.bg, color: logo.color, 
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                      fontSize: '0.65rem', fontWeight: 900, flexShrink: 0,
+                      boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
+                    }}>
+                      {pName.charAt(0)}
+                    </div>
+                    <span style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>{logo.label}</span>
+                  </div>
+                </td>
+                {vehicleTypes.map(v => {
+                  const fare = getFare(pName, v.id);
+                  const isSelected = selected?.provider === pName && selected?.type === v.id;
+                  return (
+                    <td 
+                      key={v.id} 
+                      onClick={() => fare && setSelected({ provider: pName, type: v.id, price: fare.price })}
+                      style={{ 
+                        padding: '16px 8px', 
+                        textAlign: 'center', 
+                        borderLeft: '1px solid var(--surface-border)', 
+                        cursor: fare ? 'pointer' : 'default',
+                        background: isSelected ? 'rgba(59, 130, 246, 0.08)' : 'transparent',
+                        transition: 'all 0.2s',
+                        position: 'relative'
+                      }}
+                    >
+                      <div style={{ 
+                        fontWeight: 800, fontSize: '1rem', 
+                        color: isSelected ? 'var(--accent-secondary)' : (fare ? 'var(--text-primary)' : '#cbd5e1'),
+                        transform: isSelected ? 'scale(1.1)' : 'scale(1)',
+                        transition: 'transform 0.2s'
+                      }}>
+                        {fare ? `₹${fare.price}` : '--'}
+                      </div>
+                      {isSelected && <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '3px', background: 'var(--accent-secondary)' }} />}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
 
       {/* BOOK BUTTON */}
-      <div style={{ padding: '24px', textAlign: 'center', background: '#f8fafc', borderTop: '1px solid var(--surface-border)' }}>
+      <div style={{ padding: '24px 16px', textAlign: 'center', background: '#f8fafc', borderTop: '1px solid var(--surface-border)' }}>
         <button 
           className="btn-primary" 
           disabled={!selected}
           onClick={handleBooking}
           style={{ 
             width: '100%', 
-            maxWidth: '400px', 
-            padding: '16px', 
-            fontSize: '1.2rem', 
-            borderRadius: '50px',
-            background: selected ? '#65a30d' : '#94a3b8',
-            boxShadow: selected ? '0 4px 12px rgba(101, 163, 13, 0.3)' : 'none',
+            padding: '18px', 
+            fontSize: '1.1rem', 
+            borderRadius: '16px',
+            background: selected ? 'var(--success-color)' : '#cbd5e1',
+            boxShadow: selected ? '0 10px 20px rgba(16, 185, 129, 0.2)' : 'none',
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '12px'
+            gap: '12px',
+            border: 'none',
+            color: 'white',
+            fontWeight: 700,
+            cursor: selected ? 'pointer' : 'not-allowed'
           }}
         >
-          {selected ? `Book ${selected.provider} ${selected.type}` : 'Select a Fare to Book'}
-          <ChevronRight size={20} />
+          {selected ? (
+            <>Book {selected.provider} {selected.type} <ChevronRight size={20} /></>
+          ) : 'Select your ride to book'}
         </button>
-        <div style={{ marginTop: '12px', fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
-          <ShieldCheck size={14} color="#10b981" /> Verified direct booking links
+        <div style={{ marginTop: '16px', fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+          <ShieldCheck size={14} color="var(--success-color)" /> 
+          <span style={{ fontWeight: 500 }}>Secure direct-to-app booking</span>
         </div>
       </div>
     </div>
