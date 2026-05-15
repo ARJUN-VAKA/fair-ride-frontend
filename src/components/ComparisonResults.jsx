@@ -65,15 +65,17 @@ const ComparisonResults = ({ coords, addresses, accountsLinked }) => {
     <div className="page-enter" style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid var(--surface-border)', overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
       {/* GRID HEADER */}
       <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr 1fr', borderBottom: '1px solid var(--surface-border)', background: '#f8fafc' }}>
-        <div style={{ padding: '20px' }}></div>
-        {vehicleTypes.map(v => (
-          <div key={v.id} style={{ padding: '20px', textAlign: 'center', borderLeft: '1px solid var(--surface-border)' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-              <v.icon size={22} color="var(--text-primary)" />
-              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-secondary)' }}>{v.label}</span>
+        {vehicleTypes.map(v => {
+          const Icon = v.icon;
+          return (
+            <div key={v.id} style={{ padding: '20px', textAlign: 'center', borderLeft: '1px solid var(--surface-border)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                <Icon size={22} color="var(--text-primary)" />
+                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-secondary)' }}>{v.label}</span>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* GRID ROWS */}
