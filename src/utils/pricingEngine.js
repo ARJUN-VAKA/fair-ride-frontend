@@ -29,6 +29,19 @@ const providerRates = {
   'Bharat Taxi Cab': { base: 55, perKm: 14.5, type: 'Cab' },
 };
 
+// Read API key from localStorage (set by admin dashboard)
+const getProviderApiKey = (providerName) => {
+  const keyMap = {
+    'Rapido': 'apikey_rapido',
+    'Namma': 'apikey_nammayatri',
+    'Ola': 'apikey_ola',
+    'Uber': 'apikey_uber',
+  };
+  const key = Object.keys(keyMap).find(k => providerName.includes(k));
+  const storageKey = key ? keyMap[key] : null;
+  return storageKey ? localStorage.getItem(storageKey) : null;
+};
+
 export const getDynamicFares = (pickupCoords, dropoffCoords, isPooling) => {
   if (!pickupCoords || !dropoffCoords) return [];
 
@@ -48,6 +61,13 @@ export const getDynamicFares = (pickupCoords, dropoffCoords, isPooling) => {
       const rate = providerRates[variantName];
       const provider = variantName.split(' ')[0];
       
+      // Check if a real API key is configured by admin
+      const apiKey = getProviderApiKey(provider);
+      const usingLiveApi = !!apiKey;
+
+      // Hide Namma Yatri if no API key is provided
+      if (provider === 'Namma' && !usingLiveApi) return null;
+
       const demandSeed = Math.sin((index + 1) * distanceKm * 7) * 0.5 + 0.5;
       const providerDemandSurge = 1.0 + (demandSeed * 0.15);
 
@@ -60,8 +80,10 @@ export const getDynamicFares = (pickupCoords, dropoffCoords, isPooling) => {
         price: finalPrice,
         type: rate.type,
         eta: `${Math.max(2, Math.round(2 + demandSeed * 8))} min`,
+        usingLiveApi,
       };
-    });
+    })
+    .filter(Boolean);
 
   return results;
 };

@@ -38,7 +38,13 @@ const ComparisonResults = ({ coords, addresses, accountsLinked }) => {
 
   if (results.length === 0) return null;
 
-  const providers = ['Ola', 'Rapido', 'Uber', 'Namma', 'Bharat'];
+  // Dynamically determine available providers from results
+  // This ensures Namma Yatri only shows if its API key is present
+  const availableProviders = [...new Set(results.map(r => r.provider))];
+  // Sort them in a consistent order
+  const order = ['Ola', 'Rapido', 'Uber', 'Namma', 'Bharat'];
+  const providers = order.filter(p => availableProviders.some(ap => ap.includes(p)));
+
   const vehicleTypes = [
     { id: 'Bike', icon: Bike, label: 'Bike' },
     { id: 'Auto', icon: AutoIcon, label: 'Auto' },
