@@ -11,7 +11,7 @@ const app = express();
 app.use(cors({ origin: '*' }));
 app.use(express.json());
 
-const SUPABASE_URL = process.env.SUPABASE_URL || 'https://cxmlerkxwxfqenexvtim.supabase.co';
+const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const JWT_SECRET = process.env.JWT_SECRET || 'fairride_secret_2026';
 
